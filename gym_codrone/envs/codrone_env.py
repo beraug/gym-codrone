@@ -149,7 +149,7 @@ class CodroneEnv(gym.Env):
         current_dist_X = self.calculate_dist_between_two_Points(horizontal_position.X, self.desired_horizontal_position.X)
         print("Calculated Distance = "+str(current_dist))
         
-        if height < self.desired_horizontal_position.X:
+        if height < self.desired_horizontal_position:
             reward = 10
             self.best_dist = current_dist_X
         elif current_dist_X == self.best_dist:
@@ -160,7 +160,7 @@ class CodroneEnv(gym.Env):
         
         return reward        
      
-    def improved_Y_reward(self, horizontal_position.Y):
+    def improved_Y_reward(self, horizontal_position):
         current_dist_Y = self.calculate_dist_between_two_Points(horizontal_position.Y, self.desired_horizontal_position.Y)
         print("Calculated Distance = "+str(current_dist))
         

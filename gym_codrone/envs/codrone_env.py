@@ -11,7 +11,7 @@ import time
 import numpy as np
 import tensorflow as tf
 import time
-from gym import utils, spaces
+from gym import error, utils, spaces
 from gym.utils import seeding
 from gym.envs.registration import register
 import CoDrone

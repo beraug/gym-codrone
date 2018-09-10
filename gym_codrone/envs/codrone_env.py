@@ -1,11 +1,4 @@
 
-# coding: utf-8
-
-# In[4]:
-
-
-#!/usr/bin/env python
-
 import gym
 import time
 import numpy as np
@@ -15,9 +8,6 @@ from gym import error, utils, spaces
 from gym.utils import seeding
 from gym.envs.registration import register
 import CoDrone
-
-
-# In[ ]:
 
 
 #register the training environment in the gym as an available one

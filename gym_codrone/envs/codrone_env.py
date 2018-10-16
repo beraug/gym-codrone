@@ -47,7 +47,7 @@ class CodroneEnv(gym.Env):
         self.battery_state = drone.getBatteryPercentage()
         self.drone_temp = drone.getDroneTemp()
         self.observation_space = [drone.getOptFlowPosition(),drone.getHeight()]
-        self.max_altitude = 2000
+        self.max_altitude = 3000
         
         self.action_space = spaces.Discrete(6) 
         #FORWARD, BACKWARD, LEFT, RIGHT, UP, and DOWN

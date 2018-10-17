@@ -108,7 +108,9 @@ class CoDroneEnv(gym.Env):
         # we perform the corresponding movement of the robot
         
         # 1st, we decide if the drone is flying or not FORWARD, BACKWARD, LEFT, RIGHT, UP, and DOWN
-        if drone.getState()!= 'FLIGHT':
+        if drone.getState() = 'FLIP':
+            drone.turtleTurn()
+        elif drone.getState()!= 'FLIGHT' and drone.getState()!= 'FLIP':
             drone.takeoff()
             drone.hover()
         else:

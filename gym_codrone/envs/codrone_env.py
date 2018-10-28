@@ -44,9 +44,9 @@ class CoDroneEnv(gym.Env):
         self.horizontal_position_X = horizontal_position.X
         self.horizontal_position_Y = horizontal_position.Y
         print(horizontal_position_X, horizontal_position_Y, height)
-        X = 0
-        Y = 0
-        Z = 1500
+        #X = 0
+        #Y = 0
+        #Z = 2000
         # gets training parameters from sensors
         self.throttle = drone.getThrottle()
         #self.horizontal_position = drone.getOptFlowPosition()
@@ -83,7 +83,9 @@ class CoDroneEnv(gym.Env):
         
     # Resets the state of the environment and returns an initial observation.
     def reset(self):
-            
+        
+        reset_position = drone.emergencyStop()
+                
         # 4th: takes an observation of the initial condition of the robot
         horizontal_position = drone.getOptFlowPosition()
         horizontal_position_X = horizontal_position.X
@@ -97,6 +99,7 @@ class CoDroneEnv(gym.Env):
         self.state = (horizontal_position_X, horizontal_position_Y, height)
         self.steps_beyond_done = None
         return np.array(self.state)
+        print("drone reset OK")
     
     def step(self, action):
 
@@ -124,7 +127,7 @@ class CoDroneEnv(gym.Env):
                 drone.go(5, 3)
             elif action == 5: #DOWN
                 drone.go(6, 3)
-            
+        
         #go(vel_cmd)
         time.sleep(self.running_step)
         
@@ -137,15 +140,27 @@ class CoDroneEnv(gym.Env):
         #horizontal_position_X, horizontal_position_Y, height = self.take_observation()
         reward, done = self.process_data(horizontal_position_X, horizontal_position_Y, height)
         
-        # Promote going forwards instead if turning
-        if action == 4:
-            reward += 100
-        elif action == 1 or action == 2:
-            reward -= 50
-        elif action == 3:
-            reward -= 150
-        else:
-            reward -= 50
+        max_dist_allowed = 300
+        test_upside = drone.isUpsideDown()
+        test_accident = drone.getState()
+                
+        done = horizontal_position_X > max_dist_allowed \
+            or horizontal_position_X < -max_dist_allowed \
+            or horizontal_position_Y > max_dist_allowed \
+            or horizontal_position_Y < -max_dist_allowed \
+            or height < (height - max_dist_allowed)
+            # or test_upside == True \
+            # or test_accident == 'ACCIDENT':
+        done = bool(done)
+        
+        if not done:
+            # Promote going upwards instead of turning
+            if action == 4:
+                reward += 1
+            elif action == 1 or action == 5:
+                reward -= 5
+            elif action == 0 or action == 2 or action == 3:
+                reward -= 1
         
         self.state = (horizontal_position_X, horizontal_position_Y, height)
         #state = [horizontal_position_X, horizontal_position_Y, height, gyro_angles]
@@ -184,10 +199,11 @@ class CoDroneEnv(gym.Env):
         if altitude_bad or pitch_bad or roll_bad:
             print("Drone flight status is wrong")
             done = True
-            reward = -200
+            reward = -20
         else:
             reward = self.improved_X_reward(horizontal_position_X) + self.improved_Y_reward(horizontal_position_Y) + self.improved_Z_reward(height)
 
+        print("Reward calculated = "+str(reward))
         return reward,done
 
     
@@ -326,5 +342,3 @@ class CoDroneEnv(gym.Env):
         drone.takeoff()
         drone.hover(3)
         print("Taking-Off sequence completed")
-
-

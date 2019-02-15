@@ -4,7 +4,7 @@ import random
 import tensorflow.contrib.slim as slim
 import numpy as np
 import matplotlib.pyplot as plt
-
+%matplotlib inline
 #Policy Based Agent 1
 def discount_rewards(r):
     #take 1D float array of rewards and compute discounted reward
@@ -48,7 +48,8 @@ class agent():
         optimizer = tf.train.AdamOptimizer(learning_rate=lr)
         self.update_batch = optimizer.apply_gradients(zip(self.gradient_holders,tvars))
 
-        self.alpha = 0.1      # discount constant
-        self.epsilon = 0.9  # exploration constant
-        self.gamma = 0.9      # discount factor
+        self.epsilon = epsilon  # exploration constant
+        self.alpha = alpha      # discount constant
+        self.gamma = gamma      # discount factor
         epsilon_discount = 0.01 # 8 eps to reach 0.1
+        self.actions = actions

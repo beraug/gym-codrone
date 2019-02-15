@@ -4,11 +4,7 @@ import random
 import tensorflow.contrib.slim as slim
 import numpy as np
 import matplotlib.pyplot as plt
-get_ipython().run_line_magic('matplotlib', 'inline')
-
-
-# In[2]:
-
+%matplotlib inline
 
 #Policy Based Agent 1
 def discount_rewards(r):
@@ -19,9 +15,6 @@ def discount_rewards(r):
         running_add = running_add * gamma + r[t]
         discounted_r[t] = running_add
     return discounted_r
-
-
-# In[3]:
 
 
 #Policy Based Agent 2
@@ -60,11 +53,7 @@ class agent():
         self.epsilon = 0.9  # exploration constant
         self.gamma = 0.9      # discount factor
         epsilon_discount = 0.01 # 8 eps to reach 0.1
-
-
-# In[4]:
-
-
+        
 #Training the Agent
 tf.reset_default_graph() #Clear the Tensorflow graph.
 
@@ -139,4 +128,3 @@ with tf.Session() as sess:
         i += 1
         s = env.reset()
         d = False
-

@@ -4,7 +4,7 @@ import random
 import tensorflow.contrib.slim as slim
 import numpy as np
 import matplotlib.pyplot as plt
-%matplotlib inline
+
 #Policy Based Agent 1
 def discount_rewards(r):
     #take 1D float array of rewards and compute discounted reward
